@@ -5,17 +5,24 @@ plugins {
     id('org.jetbrains.kotlin.android')
 }
 
+// 从 local.properties 读取签名配置
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
-    namespace 'com.pengxh.daily.app'
-    compileSdk 36
+    namespace = 'com.pengxh.daily.app'
+    compileSdk = 36
 
     defaultConfig {
-        applicationId 'com.pengxh.daily.app'
-        minSdk 26
-        targetSdk 36
-        versionCode 2261
-        versionName '2.2.6.1'
-        ndkVersion '21.4.7075529'
+        applicationId = 'com.pengxh.daily.app'
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 2261
+        versionName = '2.2.6.1'
+        ndkVersion = '21.4.7075529'
 
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -31,10 +38,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('DailyTask.jks')
-            storePassword '123456789'
-            keyAlias 'key0'
-            keyPassword '123456789'
+            storeFile file(localProperties.getProperty('STORE_FILE', 'DailyTask.jks'))
+            storePassword localProperties.getProperty('STORE_PASSWORD', '')
+            keyAlias localProperties.getProperty('KEY_ALIAS', '')
+            keyPassword localProperties.getProperty('KEY_PASSWORD', '')
         }
     }
 
@@ -42,7 +49,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            signingConfig = signingConfigs.release
         }
     }
 
@@ -59,24 +66,24 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
-            version "3.22.1"
+            version = "3.22.1"
         }
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 
     buildFeatures {
-        buildConfig true
-        viewBinding true
+        buildConfig = true
+        viewBinding = true
     }
 
     applicationVariants.configureEach {

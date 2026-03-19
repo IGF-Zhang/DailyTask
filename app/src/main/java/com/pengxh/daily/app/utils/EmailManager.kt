@@ -1,6 +1,7 @@
 package com.pengxh.daily.app.utils
 
 import android.util.Log
+import com.pengxh.daily.app.BuildConfig
 import com.pengxh.daily.app.sqlite.DatabaseWrapper
 import com.pengxh.kt.lite.extensions.toJson
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +46,9 @@ class EmailManager() {
         }
 
         val config = configs.last()
-        Log.d(kTag, "邮箱配置: ${config.toJson()}")
+        if (BuildConfig.DEBUG) {
+            Log.d(kTag, "邮箱配置: ${config.toJson()}")
+        }
 
         val authenticator = EmailAuthenticator(config.outbox, config.authCode)
         val props = createSmtpProperties()
